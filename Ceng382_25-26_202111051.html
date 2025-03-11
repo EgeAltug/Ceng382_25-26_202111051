@@ -4,14 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokéball - Pokémon</title>
-  <!-- 
-  ChatGPT Prompt 1: Find me a font suitable for a Pokemon themed website.
-  ChatGPT Prompt 2: Draw a Pokéball using CSS.
-  ChatGPT Prompt 3: Which commands can I use to move the Pokeball around the screen?
-  ChatGPT Prompt 4: How can I make the Pokeball clickable?
-  ChatGPT Prompt 5: Can you make the Pokeball shake when clicked?
-  ChatGPT Prompt 6: Can you create a live clock that displays the current time using JavaScript?
-  -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     body {
@@ -200,14 +192,15 @@
   <div class="login-container">
     <div class="poke-logo"></div>
     <h3>Trainer Login</h3>
-    <form action="#">
-      <input type="text" placeholder="Username" required>
-      <input type="password" placeholder="Password" required>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
   </div>
 
   <script>
+    // Clock functionality
     function updateClock() {
       const clock = document.getElementById("clock");
       const now = new Date();
@@ -216,6 +209,35 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Array to store login attempts
+    const loginAttempts = [];
+
+    // Login functionality
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Store the login attempt in the array
+      loginAttempts.push({ username: username, password: password });
+
+      // Print all login attempts to the console
+      console.log("Login Attempts:", loginAttempts);
+
+      const defaultUsername = "admin";
+      const defaultPassword = "admin";
+
+      // Check credentials
+      if (username === defaultUsername && password === defaultPassword) {
+        // Redirect to table.html on successful login
+        window.location.href = "table.html";
+      } else {
+        alert("Invalid credentials! Please try again.");
+      }
+    });
+
+    // Toggle login form visibility with 'h' key
     document.addEventListener('keydown', function(e) {
       if (e.key.toLowerCase() === 'h') {
         document.querySelectorAll('form').forEach(form => {

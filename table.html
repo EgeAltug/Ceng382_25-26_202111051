@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Information</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            background-image: url('https://images6.alphacoders.com/326/326467.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+        }
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            border: 5px solid #ffcb05;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        input, textarea, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border: 2px solid #ffcb05;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+        button {
+            background-color: #ffcb05;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 5px solid #ffcb05;
+        }
+        th, td {
+            border: 2px solid #ffcb05;
+            padding: 10px;
+        }
+        th {
+            background-color: #ff0000;
+        }
+        tr:hover {
+            background-color: rgba(255, 203, 5, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add Class Information</h2>
+        <form id="classForm">
+            <input type="text" id="className" placeholder="Class Name" required>
+            <input type="number" id="numPeople" placeholder="Number of People" required>
+            <textarea id="description" placeholder="Description" required></textarea>
+            <button type="submit">Add Class</button>
+        </form>
+    </div>
+    
+    <table id="classTable">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Number of People</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.getElementById('classForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let className = document.getElementById('className').value;
+            let numPeople = document.getElementById('numPeople').value;
+            let description = document.getElementById('description').value;
+            
+            let table = document.getElementById('classTable').getElementsByTagName('tbody')[0];
+            let newRow = table.insertRow();
+            newRow.innerHTML = `<td>${className}</td><td>${numPeople}</td><td>${description}</td>`;
+            
+            newRow.addEventListener('click', function() {
+                console.log(`Class: ${className}, People: ${numPeople}, Description: ${description}`);
+                this.style.backgroundColor = 'yellow';
+            });
+            
+            newRow.addEventListener('dblclick', function() {
+                this.remove();
+            });
+            
+            newRow.addEventListener('mouseover', function() {
+                this.style.backgroundColor = 'rgba(255, 203, 5, 0.7)';
+            });
+            
+            newRow.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '';
+            });
+
+            document.getElementById('className').value = '';
+            document.getElementById('numPeople').value = '';
+            document.getElementById('description').value = '';
+        });
+    </script>
+</body>
+</html>
