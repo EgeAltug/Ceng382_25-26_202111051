@@ -1,10 +1,96 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    @(Model.EditId.HasValue ? "Edit Class" : "Add New Class")
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="@(Model.EditId.HasValue ? "Update" : "Add")">
+                        <input type="hidden" asp-for="Input.Id" />
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.ClassName" class="form-label"></label>
+                            <input asp-for="Input.ClassName" class="form-control">
+                            <span asp-validation-for="Input.ClassName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.StudentCount" class="form-label"></label>
+                            <input asp-for="Input.StudentCount" class="form-control">
+                            <span asp-validation-for="Input.StudentCount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Input.Description" class="form-label"></label>
+                            <textarea asp-for="Input.Description" class="form-control"></textarea>
+                            <span asp-validation-for="Input.Description" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            @(Model.EditId.HasValue ? "Update" : "Add")
+                        </button>
+                        @if (Model.EditId.HasValue)
+                        {
+                            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Class List
+                </div>
+                <div class="card-body">
+                    @if (!Model.Classes.Any())
+                    {
+                        <p>No classes found</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Class Name</th>
+                                        <th>Students</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Classes)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.ClassName</td>
+                                            <td>@item.StudentCount</td>
+                                            <td>@item.Description</td>
+                                            <td>
+                                                <form method="post" class="d-inline">
+                                                    <button asp-page-handler="Edit" asp-route-id="@item.Id" 
+                                                            class="btn btn-sm btn-warning">Edit</button>
+                                                </form>
+                                                <form method="post" class="d-inline">
+                                                    <button asp-page-handler="Delete" asp-route-id="@item.Id" 
+                                                            class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
