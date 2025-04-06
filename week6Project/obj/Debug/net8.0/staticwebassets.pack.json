@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\week6Project.bundle.scp.css",
-      "PackagePath": "staticwebassets\\week6Project.bundle.scp.css"
+      "Id": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\week5Project.bundle.scp.css",
+      "PackagePath": "staticwebassets\\week5Project.bundle.scp.css"
     },
     {
       "Id": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\wwwroot\\css\\site.css",
@@ -245,19 +245,19 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.week6Project.props",
-      "PackagePath": "build\\week6Project.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.week5Project.props",
+      "PackagePath": "build\\week5Project.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.week6Project.props",
-      "PackagePath": "buildMultiTargeting\\week6Project.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.week5Project.props",
+      "PackagePath": "buildMultiTargeting\\week5Project.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.week6Project.props",
-      "PackagePath": "buildTransitive\\week6Project.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.week5Project.props",
+      "PackagePath": "buildTransitive\\week5Project.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.week6Project.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.week5Project.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     }
   ],
