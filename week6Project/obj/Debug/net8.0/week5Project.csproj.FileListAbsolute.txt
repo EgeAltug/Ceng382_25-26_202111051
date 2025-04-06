@@ -29,3 +29,14 @@ D:\Web-Lab\Ceng382_25-26_202111051\week5Project\obj\Debug\net8.0\refint\week5Pro
 D:\Web-Lab\Ceng382_25-26_202111051\week5Project\obj\Debug\net8.0\week5Project.pdb
 D:\Web-Lab\Ceng382_25-26_202111051\week5Project\obj\Debug\net8.0\week5Project.genruntimeconfig.cache
 D:\Web-Lab\Ceng382_25-26_202111051\week5Project\obj\Debug\net8.0\ref\week5Project.dll
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.GeneratedMSBuildEditorConfig.editorconfig
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.AssemblyInfoInputs.cache
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.AssemblyInfo.cs
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.csproj.CoreCompileInputs.cache
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.MvcApplicationPartsAssemblyInfo.cache
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.RazorAssemblyInfo.cache
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.RazorAssemblyInfo.cs
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.sourcelink.json
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.dll
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\refint\week5Project.dll
+D:\Web-Lab\Ceng382_25-26_202111051\week6Project\obj\Debug\net8.0\week5Project.pdb
