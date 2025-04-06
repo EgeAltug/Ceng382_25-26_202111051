@@ -43,7 +43,7 @@ public class IndexModel : PageModel
             }
         }
 
-        // Filter
+        // Filter the list based on the filter input
         var query = _classes.AsQueryable();
         if (!string.IsNullOrWhiteSpace(FilterClassName))
         {
@@ -66,7 +66,7 @@ public class IndexModel : PageModel
             })
             .ToList();
 
-        // Load edit target
+        // If editing, load the record into the Input model so that the form fields are pre-populated.
         if (EditId.HasValue)
         {
             Input = _classes.FirstOrDefault(c => c.Id == EditId) ?? new ClassInformationModel();
@@ -80,11 +80,12 @@ public class IndexModel : PageModel
         Input.Id = _nextId++;
         _classes.Add(Input);
         Input = new ClassInformationModel();
-        return RedirectToPage();
+        return RedirectToPage(new { FilterClassName, PageNumber });
     }
 
     public IActionResult OnPostEdit(int id)
     {
+        // Set EditId and reload the page so OnGet can prefill the form.
         EditId = id;
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
@@ -100,6 +101,7 @@ public class IndexModel : PageModel
             existing.StudentCount = Input.StudentCount;
             existing.Description = Input.Description;
         }
+        // Clear the edit state
         Input = new ClassInformationModel();
         EditId = null;
         return RedirectToPage(new { FilterClassName, PageNumber });
