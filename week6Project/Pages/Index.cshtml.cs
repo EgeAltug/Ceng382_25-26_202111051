@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using YourProjectName.Models;
+using week6Project.Models;
 using System.Linq;
 
 namespace week6Project.Pages;
