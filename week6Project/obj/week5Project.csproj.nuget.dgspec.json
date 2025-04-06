@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week5Project.csproj": {}
+    "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj": {}
   },
   "projects": {
-    "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week5Project.csproj": {
+    "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week5Project.csproj",
-        "projectName": "week5Project",
-        "projectPath": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week5Project.csproj",
+        "projectUniqueName": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj",
+        "projectName": "week6Project",
+        "projectPath": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj",
         "packagesPath": "C:\\Users\\ege\\.nuget\\packages\\",
         "outputPath": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\obj\\",
         "projectStyle": "PackageReference",
