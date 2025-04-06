@@ -1,6 +1,6 @@
 namespace week6Project.Models;
 
-public class ClassInformationTable
+public class ClassInformationModel
 {
     public int CurrentPage { get; set; } = 1;
     public int PageSize { get; set; } = 10;
