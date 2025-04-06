@@ -37,7 +37,7 @@ public class IndexModel : PageModel
                 {
                     Id = _nextId++,
                     ClassName = $"Class {i + 1}",
-                    StudentCount = 10 + (i % 30),
+                    StudentCount = 10,
                     Description = $"Description for Class {i + 1}"
                 });
             }
