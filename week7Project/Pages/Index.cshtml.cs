@@ -117,3 +117,55 @@ public class IndexModel : PageModel
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
 }
+public IActionResult OnPostExport(string exportType, string? selectedColumns)
+{
+    // Ensure data exists (handle first-time export without page load)
+    if (_classes.Count == 0)
+    {
+        GenerateSyntheticData();
+    }
+
+    var baseData = exportType == "filtered" 
+        ? GetFilteredData() 
+        : _classes;
+
+    if (!baseData.Any())
+    {
+        TempData["ErrorMessage"] = "No data to export";
+        return RedirectToPage();
+    }
+
+    var columnIndices = selectedColumns?.Split(',', StringSplitOptions.RemoveEmptyEntries) 
+        ?? Array.Empty<string>();
+    
+    var properties = GetExportProperties(columnIndices);
+    
+    var exportData = baseData.Select(c => new ClassInformationTableModel
+    {
+        Id = c.Id,
+        ClassName = c.ClassName,
+        StudentCount = c.StudentCount,
+        Description = c.Description
+    });
+
+    var json = JsonExporter.Instance.Export(exportData, properties);
+
+    return new FileContentResult(Encoding.UTF8.GetBytes(json), "application/json")
+    {
+        FileDownloadName = $"classes-{exportType}-{DateTime.Now:yyyyMMddHHmmss}.json"
+    };
+}
+
+private void GenerateSyntheticData()
+{
+    for (int i = _classes.Count; i < 100; i++)
+    {
+        _classes.Add(new ClassInformationModel
+        {
+            Id = _nextId++,
+            ClassName = $"Class {i + 1}",
+            StudentCount = 10,
+            Description = $"Description for Class {i + 1}"
+        });
+    }
+}
