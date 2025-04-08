@@ -2,18 +2,36 @@
 @model IndexModel
 
 <div class="container mt-4">
-    <!-- Filter Form -->
+        <!-- Filter Form and Export Buttons -->
     <div class="row mb-3">
-        <div class="col">
+        <div class="col-md-6">
+            <!-- Existing Filter Form -->
             <form method="get" class="form-inline">
                 <div class="input-group">
-                    <input type="text" name="FilterClassName" value="@Model.FilterClassName" class="form-control" placeholder="Filter by Class Name" />
+                    <input type="text" name="FilterClassName" value="@Model.FilterClassName" 
+                        class="form-control" placeholder="Filter by Class Name" />
                     <button type="submit" class="btn btn-outline-primary">Filter</button>
                 </div>
             </form>
         </div>
+        
+        <!-- New Export Buttons (Right-aligned) -->
+        <div class="col-md-6 text-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" onclick="handleExport('unfiltered')">
+                    Export Full Data
+                </button>
+                <button type="button" class="btn btn-info" onclick="handleExport('filtered')">
+                    Export Filtered Data
+                </button>
+            </div>
+        </div>
     </div>
-
+<!-- Hidden Form for Export -->
+<form id="exportForm" method="post" asp-page-handler="Export" style="display: none;">
+    <input type="hidden" name="ExportType" id="exportType" />
+    <input type="hidden" name="SelectedColumns" id="selectedColumns" />
+</form>
     <!-- Add/Edit Form -->
     <div class="row">
         <div class="col-md-6">
@@ -68,9 +86,9 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Class Name</th>
-                                        <th>Students</th>
-                                        <th>Description</th>
+                                        <th data-exportable="true">Class Name</th>
+                                        <th data-exportable="true">Students</th>
+                                        <th data-exportable="true">Description</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -115,4 +133,29 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        let selectedColumns = new Set();
+        
+        document.querySelectorAll('th[data-exportable]').forEach((th, index) => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', () => {
+                th.classList.toggle('bg-primary');
+                th.classList.toggle('text-white');
+                
+                if (selectedColumns.has(index)) {
+                    selectedColumns.delete(index);
+                } else {
+                    selectedColumns.add(index);
+                }
+                
+                document.getElementById('selectedColumns').value = 
+                    Array.from(selectedColumns).join(',');
+            });
+        });
+
+        function handleExport(type) {
+            document.getElementById('exportType').value = type;
+            document.getElementById('exportForm').submit();
+        }
+    </script>
 }
