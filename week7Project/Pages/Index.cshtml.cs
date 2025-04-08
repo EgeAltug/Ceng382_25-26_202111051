@@ -116,8 +116,7 @@ public class IndexModel : PageModel
         }
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
-}
-public IActionResult OnPostExport(string exportType, string? selectedColumns)
+    public IActionResult OnPostExport(string exportType, string? selectedColumns)
 {
     // Ensure data exists (handle first-time export without page load)
     if (_classes.Count == 0)
@@ -168,4 +167,5 @@ private void GenerateSyntheticData()
             Description = $"Description for Class {i + 1}"
         });
     }
+}
 }
