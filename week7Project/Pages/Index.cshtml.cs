@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using week7Project.Models;
+using week7Project.Utils; // Assuming Utils.cs is in the week7Project.Utils namespace
+using System.Text.Json;
 
 namespace week7Project.Pages;
 
@@ -25,6 +27,14 @@ public class IndexModel : PageModel
 
     [TempData]
     public int? EditId { get; set; }
+
+    // Bind the SelectedColumns from the export form.
+    [BindProperty]
+    public string[]? SelectedColumns { get; set; }
+
+    // Bind export mode ("filtered" or "unfiltered")
+    [BindProperty]
+    public string? ExportMode { get; set; }
 
     public void OnGet()
     {
@@ -116,56 +126,31 @@ public class IndexModel : PageModel
         }
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
-    public IActionResult OnPostExport(string exportType, string? selectedColumns)
-{
-    // Ensure data exists (handle first-time export without page load)
-    if (_classes.Count == 0)
+
+    // New Export Handler
+    public IActionResult OnPostExport()
     {
-        GenerateSyntheticData();
-    }
-
-    var baseData = exportType == "filtered" 
-        ? GetFilteredData() 
-        : _classes;
-
-    if (!baseData.Any())
-    {
-        TempData["ErrorMessage"] = "No data to export";
-        return RedirectToPage();
-    }
-
-    var columnIndices = selectedColumns?.Split(',', StringSplitOptions.RemoveEmptyEntries) 
-        ?? Array.Empty<string>();
-    
-    var properties = GetExportProperties(columnIndices);
-    
-    var exportData = baseData.Select(c => new ClassInformationTableModel
-    {
-        Id = c.Id,
-        ClassName = c.ClassName,
-        StudentCount = c.StudentCount,
-        Description = c.Description
-    });
-
-    var json = JsonExporter.Instance.Export(exportData, properties);
-
-    return new FileContentResult(Encoding.UTF8.GetBytes(json), "application/json")
-    {
-        FileDownloadName = $"classes-{exportType}-{DateTime.Now:yyyyMMddHHmmss}.json"
-    };
-}
-
-private void GenerateSyntheticData()
-{
-    for (int i = _classes.Count; i < 100; i++)
-    {
-        _classes.Add(new ClassInformationModel
+        // Determine which records to export based on ExportMode.
+        List<ClassInformationModel> exportData;
+        if (ExportMode == "filtered")
         {
-            Id = _nextId++,
-            ClassName = $"Class {i + 1}",
-            StudentCount = 10,
-            Description = $"Description for Class {i + 1}"
-        });
+            // Apply the same filtering as in OnGet.
+            var query = _classes.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(FilterClassName))
+            {
+                query = query.Where(c => c.ClassName.Contains(FilterClassName, StringComparison.OrdinalIgnoreCase));
+            }
+            exportData = query.ToList();
+        }
+        else // "unfiltered" or any other case
+        {
+            exportData = _classes;
+        }
+
+        // Use the Utils singleton to export data to JSON.
+        string jsonResult = Utils.Instance.ExportToJson(exportData, SelectedColumns?.ToList());
+
+        // Return the JSON as a downloadable file.
+        return File(System.Text.Encoding.UTF8.GetBytes(jsonResult), "application/json", "Export.json");
     }
-}
 }
