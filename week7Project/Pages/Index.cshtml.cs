@@ -149,7 +149,6 @@ public class IndexModel : PageModel
 
         // Use the Utils singleton to export data to JSON.
         string jsonResult = Utils.Instance.ExportToJson(exportData, SelectedColumns?.ToList());
-
         // Return the JSON as a downloadable file.
         return File(System.Text.Encoding.UTF8.GetBytes(jsonResult), "application/json", "Export.json");
     }
