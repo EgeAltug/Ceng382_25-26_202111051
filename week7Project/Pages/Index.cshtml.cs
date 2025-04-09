@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using week7Project.Models;
-using week7Project.Utils; // Assuming Utils.cs is in the week7Project.Utils namespace
+using System.Text;
 using System.Text.Json;
+using week7Project.Models;
+using week7Project.Utils;
 
 namespace week7Project.Pages;
 
@@ -28,17 +29,8 @@ public class IndexModel : PageModel
     [TempData]
     public int? EditId { get; set; }
 
-    // Bind the SelectedColumns from the export form.
-    [BindProperty]
-    public string[]? SelectedColumns { get; set; }
-
-    // Bind export mode ("filtered" or "unfiltered")
-    [BindProperty]
-    public string? ExportMode { get; set; }
-
     public void OnGet()
     {
-        // Generate synthetic data only once
         if (_classes.Count < 100)
         {
             for (int i = _classes.Count; i < 100; i++)
@@ -53,7 +45,6 @@ public class IndexModel : PageModel
             }
         }
 
-        // Filter the list based on the filter input
         var query = _classes.AsQueryable();
         if (!string.IsNullOrWhiteSpace(FilterClassName))
         {
@@ -62,7 +53,6 @@ public class IndexModel : PageModel
 
         var filtered = query.ToList();
 
-        // Pagination
         TotalPages = (int)Math.Ceiling(filtered.Count / (double)PageSize);
         PaginatedClasses = filtered
             .Skip((PageNumber - 1) * PageSize)
@@ -76,7 +66,6 @@ public class IndexModel : PageModel
             })
             .ToList();
 
-        // If editing, load the record into the Input model so that the form fields are pre-populated.
         if (EditId.HasValue)
         {
             Input = _classes.FirstOrDefault(c => c.Id == EditId) ?? new ClassInformationModel();
@@ -86,7 +75,6 @@ public class IndexModel : PageModel
     public IActionResult OnPostAdd()
     {
         if (!ModelState.IsValid) return Page();
-
         Input.Id = _nextId++;
         _classes.Add(Input);
         Input = new ClassInformationModel();
@@ -95,7 +83,6 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostEdit(int id)
     {
-        // Set EditId and reload the page so OnGet can prefill the form.
         EditId = id;
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
@@ -111,7 +98,6 @@ public class IndexModel : PageModel
             existing.StudentCount = Input.StudentCount;
             existing.Description = Input.Description;
         }
-        // Clear the edit state
         Input = new ClassInformationModel();
         EditId = null;
         return RedirectToPage(new { FilterClassName, PageNumber });
@@ -120,36 +106,63 @@ public class IndexModel : PageModel
     public IActionResult OnPostDelete(int id)
     {
         var item = _classes.FirstOrDefault(c => c.Id == id);
-        if (item != null)
-        {
-            _classes.Remove(item);
-        }
+        if (item != null) _classes.Remove(item);
         return RedirectToPage(new { FilterClassName, PageNumber });
     }
 
-    // New Export Handler
-    public IActionResult OnPostExport()
+    public IActionResult OnPostExport(string exportType, string? selectedColumns)
     {
-        // Determine which records to export based on ExportMode.
-        List<ClassInformationModel> exportData;
-        if (ExportMode == "filtered")
-        {
-            // Apply the same filtering as in OnGet.
-            var query = _classes.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(FilterClassName))
-            {
-                query = query.Where(c => c.ClassName.Contains(FilterClassName, StringComparison.OrdinalIgnoreCase));
-            }
-            exportData = query.ToList();
-        }
-        else // "unfiltered" or any other case
-        {
-            exportData = _classes;
-        }
+        var baseData = exportType == "filtered" 
+            ? GetFilteredData() 
+            : _classes;
 
-        // Use the Utils singleton to export data to JSON.
-        string jsonResult = Utils.Instance.ExportToJson(exportData, SelectedColumns?.ToList());
-        // Return the JSON as a downloadable file.
-        return File(System.Text.Encoding.UTF8.GetBytes(jsonResult), "application/json", "Export.json");
+        var columnIndices = selectedColumns?.Split(',', StringSplitOptions.RemoveEmptyEntries) 
+            ?? Array.Empty<string>();
+
+        var properties = GetExportProperties(columnIndices);
+        var exportData = baseData.Select(c => new ClassInformationTableModel
+        {
+            Id = c.Id,
+            ClassName = c.ClassName,
+            StudentCount = c.StudentCount,
+            Description = c.Description
+        });
+
+        var json = JsonExporter.Instance.Export(exportData, properties);
+
+        return new FileContentResult(Encoding.UTF8.GetBytes(json), "application/json")
+        {
+            FileDownloadName = $"classes-{exportType}-{DateTime.Now:yyyyMMddHHmmss}.json"
+        };
+    }
+
+    private List<string> GetExportProperties(string[] indices)
+    {
+        var validIndices = indices
+            .Where(i => int.TryParse(i, out _))
+            .Select(int.Parse)
+            .Where(i => i >= 0 && i < 3)
+            .Distinct();
+
+        var properties = new List<string>();
+        foreach (var index in validIndices)
+        {
+            properties.Add(index switch
+            {
+                0 => "ClassName",
+                1 => "StudentCount",
+                2 => "Description",
+                _ => throw new ArgumentOutOfRangeException()
+            });
+        }
+        return properties;
+    }
+
+    private List<ClassInformationModel> GetFilteredData()
+    {
+        return _classes
+            .Where(c => string.IsNullOrWhiteSpace(FilterClassName) || 
+                c.ClassName.Contains(FilterClassName, StringComparison.OrdinalIgnoreCase))
+            .ToList();
     }
 }

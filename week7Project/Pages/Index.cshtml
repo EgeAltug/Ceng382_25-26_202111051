@@ -2,14 +2,28 @@
 @model IndexModel
 
 <div class="container mt-4">
-    <!-- Filter Form -->
+    <!-- Filter Form and Export Buttons -->
     <div class="row mb-3">
-        <div class="col">
+        <div class="col-md-6">
             <form method="get" class="form-inline">
                 <div class="input-group">
                     <input type="text" name="FilterClassName" value="@Model.FilterClassName" class="form-control" placeholder="Filter by Class Name" />
                     <button type="submit" class="btn btn-outline-primary">Filter</button>
                 </div>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" onclick="handleExport('unfiltered')">
+                    Export Full Data
+                </button>
+                <button type="button" class="btn btn-info" onclick="handleExport('filtered')">
+                    Export Filtered Data
+                </button>
+            </div>
+            <form id="exportForm" method="post" asp-page-handler="Export" class="d-none">
+                <input type="hidden" name="ExportType" id="exportType" />
+                <input type="hidden" name="SelectedColumns" id="selectedColumns" />
             </form>
         </div>
     </div>
@@ -52,44 +66,6 @@
         </div>
     </div>
 
-    <!-- Export Options -->
-    <div class="row mt-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">Export Options</div>
-                <div class="card-body">
-                    <!-- Form for JSON export -->
-                    <form method="post" asp-page-handler="Export">
-                        <!-- Export mode selection: using a hidden input to decide mode on button click -->
-                        <input type="hidden" id="ExportMode" name="ExportMode" value="" />
-
-                        <!-- Column Selection -->
-                        <div class="mb-3">
-                            <label>Select Columns to Export:</label><br />
-                            <label class="btn btn-outline-secondary m-1">
-                                <input type="checkbox" name="SelectedColumns" value="ClassName" autocomplete="off" /> Class Name
-                            </label>
-                            <label class="btn btn-outline-secondary m-1">
-                                <input type="checkbox" name="SelectedColumns" value="StudentCount" autocomplete="off" /> Student Count
-                            </label>
-                            <label class="btn btn-outline-secondary m-1">
-                                <input type="checkbox" name="SelectedColumns" value="Description" autocomplete="off" /> Description
-                            </label>
-                        </div>
-
-                        <!-- Export Buttons -->
-                        <button type="submit" class="btn btn-info" onclick="document.getElementById('ExportMode').value = 'unfiltered';">
-                            Export All (Unfiltered)
-                        </button>
-                        <button type="submit" class="btn btn-info" onclick="document.getElementById('ExportMode').value = 'filtered';">
-                            Export Filtered
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Class Table and Pagination -->
     <div class="row mt-4">
         <div class="col">
@@ -106,9 +82,9 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Class Name</th>
-                                        <th>Students</th>
-                                        <th>Description</th>
+                                        <th data-exportable="true">Class Name</th>
+                                        <th data-exportable="true">Students</th>
+                                        <th data-exportable="true">Description</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -154,17 +130,28 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Simple script to toggle the button style on checkbox selection.
-        document.querySelectorAll('input[type="checkbox"][name="SelectedColumns"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    this.parentElement.classList.remove('btn-outline-secondary');
-                    this.parentElement.classList.add('btn-success');
+        let selectedColumns = new Set();
+        
+        document.querySelectorAll('th[data-exportable]').forEach((th, index) => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', () => {
+                th.classList.toggle('bg-primary');
+                th.classList.toggle('text-white');
+                
+                if (selectedColumns.has(index)) {
+                    selectedColumns.delete(index);
                 } else {
-                    this.parentElement.classList.remove('btn-success');
-                    this.parentElement.classList.add('btn-outline-secondary');
+                    selectedColumns.add(index);
                 }
+                
+                document.getElementById('selectedColumns').value = 
+                    Array.from(selectedColumns).join(',');
             });
         });
+
+        function handleExport(type) {
+            document.getElementById('exportType').value = type;
+            document.getElementById('exportForm').submit();
+        }
     </script>
 }
