@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "q5njtEYgoyM=",
+  "dgSpecHash": "INkQcoPnCJo=",
   "success": true,
-  "projectFilePath": "D:\\Web-Lab\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\altug\\Ceng382_25-26_202111051\\week6Project\\week6Project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\altug\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.14\\microsoft.netcore.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\altug\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.14\\microsoft.windowsdesktop.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\altug\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.14\\microsoft.aspnetcore.app.ref.8.0.14.nupkg.sha512",
+    "C:\\Users\\altug\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.14\\microsoft.netcore.app.host.win-x64.8.0.14.nupkg.sha512"
+  ],
   "logs": []
 }
